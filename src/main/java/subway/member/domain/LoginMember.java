@@ -12,11 +12,7 @@ public class LoginMember {
     private String email;
     private Integer age;
 
-    private static LoginMember defaultLoginMember;
-
-    static {
-        defaultLoginMember = new LoginMember(ID_DEFAULT, EMAIL_DEFAULT, AGE_DEFAULT);
-    }
+    private static LoginMember defaultLoginMember = new LoginMember(ID_DEFAULT, EMAIL_DEFAULT, AGE_DEFAULT);
 
     public LoginMember() {
     }
