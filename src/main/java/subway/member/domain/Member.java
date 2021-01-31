@@ -6,9 +6,6 @@ public class Member {
     private String password;
     private Integer age;
 
-    public Member() {
-    }
-
     public Member(Long id, String email, String password, Integer age) {
         this.id = id;
         this.email = email;

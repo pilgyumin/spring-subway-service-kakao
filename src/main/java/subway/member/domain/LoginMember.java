@@ -14,9 +14,6 @@ public class LoginMember {
 
     private static LoginMember defaultLoginMember = new LoginMember(ID_DEFAULT, EMAIL_DEFAULT, AGE_DEFAULT);
 
-    public LoginMember() {
-    }
-
     public LoginMember(Long id, String email, Integer age) {
         this.id = id;
         this.email = email;
