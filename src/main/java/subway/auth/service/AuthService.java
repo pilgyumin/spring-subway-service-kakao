@@ -12,6 +12,8 @@ import subway.member.domain.Member;
 
 @Service
 public class AuthService {
+    private final String TOKEN_REQUEST_EMPTY = "토큰에 대한 요청값이 비어 있습니다.";
+
     private JwtTokenProvider jwtTokenProvider;
     private MemberDao memberDao;
 
@@ -20,27 +22,23 @@ public class AuthService {
         this.memberDao = memberDao;
     }
 
-    private boolean checkValidLogin(StringBuilder errorMessageBuilder, String email, String password) {
+    private void checkValidLogin(TokenRequest tokenRequest) {
+        if (tokenRequest.isEmpty()) {
+            throw new IllegalStateException(TOKEN_REQUEST_EMPTY);
+        }
         try {
-            if (!memberDao.findByEmail(email)
+            if (!memberDao.findByEmail(tokenRequest.getEmail())
                     .getPassword()
-                    .equals(password)) {
-                errorMessageBuilder.append(InvalidLoginException.EMAIL_PASSWORD_MISMATCH);
-                return false;
+                    .equals(tokenRequest.getPassword())) {
+                throw new InvalidLoginException(InvalidLoginException.EMAIL_PASSWORD_MISMATCH);
             }
         } catch (EmptyResultDataAccessException erdae) {
-            errorMessageBuilder.append(InvalidLoginException.EMAIL_NOT_EXIST);
-            return false;
+            throw new InvalidLoginException(InvalidLoginException.EMAIL_NOT_EXIST);
         }
-        return true;
     }
 
     public TokenResponse createToken(TokenRequest tokenRequest) {
-        StringBuilder errorMessageBuilder = new StringBuilder();
-        if (tokenRequest.isEmpty()
-                || !checkValidLogin(errorMessageBuilder, tokenRequest.getEmail(), tokenRequest.getPassword())) {
-            throw new InvalidLoginException(errorMessageBuilder.toString());
-        }
+        checkValidLogin(tokenRequest);
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return TokenResponse.of(accessToken);
     }
