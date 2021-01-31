@@ -12,22 +12,20 @@ public class LoginMember {
     private String email;
     private Integer age;
 
-    private static LoginMember defaultLoginMember = new LoginMember(ID_DEFAULT, EMAIL_DEFAULT, AGE_DEFAULT);
+    public static LoginMember defaultLoginMember = new LoginMember(ID_DEFAULT, EMAIL_DEFAULT, AGE_DEFAULT);
 
-    public LoginMember(Long id, String email, Integer age) {
+    private LoginMember(Long id, String email, Integer age) {
         this.id = id;
         this.email = email;
         this.age = age;
     }
 
-    public LoginMember(Member member) {
+    private LoginMember(Member member) {
         this(member.getId(), member.getEmail(), member.getAge());
     }
 
     public static LoginMember of(Member member) {
-        return Optional.ofNullable(member)
-                .map(LoginMember::new)
-                .orElse(defaultLoginMember);
+        return new LoginMember(member);
     }
 
     public Long getId() {
